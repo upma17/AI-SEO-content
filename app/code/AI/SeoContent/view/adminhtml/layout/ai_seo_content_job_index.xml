@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="AI\SeoContent\Block\Adminhtml\Job\StatusCounts"
+                   name="ai.seo.job.status"
+                   template="AI_SeoContent::job/status_counts.phtml"
+                   before="-"/>
+            <uiComponent name="ai_seo_content_job_listing"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="AI\SeoContent\Api\Data\SeoGenerationMessageInterface"
+                type="AI\SeoContent\Model\Data\SeoGenerationMessage"/>
+    <preference for="AI\SeoContent\Api\Data\JobInterface"
+                type="AI\SeoContent\Model\Job"/>
+    <type name="AI\SeoContent\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="AI\SeoContent\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">aiSeoContent</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">AI\SeoContent\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="ai_seo_generate" xsi:type="object">AI\SeoContent\Console\Command\GenerateCommand</item>
+                <item name="ai_seo_consumer_start" xsi:type="object">AI\SeoContent\Console\Command\StartConsumerCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="AI\SeoContent\Model\ResourceModel\Job\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ai_seo_content_job</argument>
+            <argument name="resourceModel" xsi:type="string">AI\SeoContent\Model\ResourceModel\Job</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="ai_seo_content_job_listing_data_source" xsi:type="string">AI\SeoContent\Model\ResourceModel\Job\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

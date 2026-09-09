@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="ai.seo.content.generate" request="AI\SeoContent\Api\Data\SeoGenerationMessageInterface">
+        <handler name="ai.seo.content.generate"
+                 type="AI\SeoContent\Model\Queue\Consumer\SeoGenerationConsumer"
+                 method="process"/>
+    </topic>
+    <topic name="ai.seo.content.generate.amqp" request="AI\SeoContent\Api\Data\SeoGenerationMessageInterface">
+        <handler name="ai.seo.content.generate.amqp"
+                 type="AI\SeoContent\Model\Queue\Consumer\SeoGenerationConsumer"
+                 method="process"/>
+    </topic>
+</config>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ai_seo_content_job" resource="default" engine="innodb" comment="AI SEO generation job queue tracker">
+        <column xsi:type="int" name="job_id" unsigned="true" nullable="false" identity="true" comment="Job ID"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" comment="Product ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" comment="Store ID"/>
+        <column xsi:type="varchar" name="sku" nullable="true" length="64" comment="SKU"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="32" default="pending" comment="Job status"/>
+        <column xsi:type="varchar" name="queue_connection" nullable="false" length="16" default="db" comment="Queue connection"/>
+        <column xsi:type="text" name="error_message" nullable="true" comment="Error message"/>
+        <column xsi:type="text" name="result_summary" nullable="true" comment="Generated fields summary"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="job_id"/>
+        </constraint>
+        <index referenceId="AI_SEO_CONTENT_JOB_PRODUCT_STORE" indexType="btree">
+            <column name="product_id"/>
+            <column name="store_id"/>
+        </index>
+        <index referenceId="AI_SEO_CONTENT_JOB_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="AI_SEO_CONTENT_JOB_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
+</schema>

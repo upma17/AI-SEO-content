@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="ai_seo_content" frontName="ai_seo_content">
+            <module name="AI_SeoContent"/>
+        </route>
+    </router>
+</config>

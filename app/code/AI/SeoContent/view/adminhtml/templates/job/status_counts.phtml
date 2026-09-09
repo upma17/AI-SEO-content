@@ -1,0 +1,42 @@
+<?php
+/** @var \AI\SeoContent\Block\Adminhtml\Job\StatusCounts $block */
+$counts = $block->getCounts();
+?>
+<div class="ai-seo-status-counts" style="margin-bottom: 20px;">
+    <div class="message message-notice">
+        <div>
+            <strong><?= $block->escapeHtml(__('Queue connection:')) ?></strong>
+            <?= $block->escapeHtml($block->getQueueConnection()) ?>
+            &nbsp;|&nbsp;
+            <strong><?= $block->escapeHtml(__('LLM:')) ?></strong>
+            <?= $block->escapeHtml($block->getLlmProvider()) ?>
+            <code><?= $block->escapeHtml($block->getLlmModel()) ?></code>
+            &nbsp;|&nbsp;
+            <strong><?= $block->escapeHtml(__('Consumer:')) ?></strong>
+            <code><?= $block->escapeHtml($block->getConsumerName()) ?></code>
+            &nbsp;|&nbsp;
+            <strong><?= $block->escapeHtml(__('Start:')) ?></strong>
+            <code>bin/magento ai:seo:consumer:start</code>
+        </div>
+    </div>
+    <table class="admin__table-secondary" style="width:100%; margin-top:10px;">
+        <thead>
+            <tr>
+                <th><?= $block->escapeHtml(__('Pending')) ?></th>
+                <th><?= $block->escapeHtml(__('Processing')) ?></th>
+                <th><?= $block->escapeHtml(__('Completed')) ?></th>
+                <th><?= $block->escapeHtml(__('Failed')) ?></th>
+                <th><?= $block->escapeHtml(__('Skipped')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong><?= (int) $counts['pending'] ?></strong></td>
+                <td><strong><?= (int) $counts['processing'] ?></strong></td>
+                <td><strong><?= (int) $counts['completed'] ?></strong></td>
+                <td><strong><?= (int) $counts['failed'] ?></strong></td>
+                <td><strong><?= (int) $counts['skipped'] ?></strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

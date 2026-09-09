@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento" type="topic" connection="db">
+        <binding id="aiSeoContentGenerateBinding"
+                 topic="ai.seo.content.generate"
+                 destination="ai.seo.content.generate"
+                 destinationType="queue"/>
+    </exchange>
+    <exchange name="magento" type="topic" connection="amqp">
+        <binding id="aiSeoContentGenerateAmqpBinding"
+                 topic="ai.seo.content.generate.amqp"
+                 destination="ai.seo.content.generate.amqp"
+                 destinationType="queue"/>
+    </exchange>
+</config>

@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ai_seo" translate="label" sortOrder="400">
+            <label>AI</label>
+        </tab>
+        <section id="ai_seo_content" translate="label" sortOrder="10"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>SEO Content Generator</label>
+            <tab>ai_seo</tab>
+            <resource>AI_SeoContent::config</resource>
+
+            <group id="llm" translate="label" sortOrder="5"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>LLM Provider</label>
+                <field id="llm_provider" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Provider</label>
+                    <source_model>AI\SeoContent\Model\Config\Source\LlmProvider</source_model>
+                    <comment>Select the AI provider. Model and API key fields below change per provider.</comment>
+                </field>
+
+                <field id="gemini_api_key" translate="label comment" type="obscure" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Gemini API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Get a key at https://aistudio.google.com/apikey</comment>
+                    <depends>
+                        <field id="llm_provider">gemini</field>
+                    </depends>
+                </field>
+                <field id="gemini_model" translate="label comment" type="select" sortOrder="21"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Gemini Model</label>
+                    <source_model>AI\SeoContent\Model\Config\Source\GeminiModel</source_model>
+                    <depends>
+                        <field id="llm_provider">gemini</field>
+                    </depends>
+                </field>
+
+                <field id="openai_api_key" translate="label comment" type="obscure" sortOrder="30"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OpenAI API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Get a key at https://platform.openai.com/api-keys (paid account required).</comment>
+                    <depends>
+                        <field id="llm_provider">openai</field>
+                    </depends>
+                </field>
+                <field id="openai_model" translate="label comment" type="select" sortOrder="31"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OpenAI Model</label>
+                    <source_model>AI\SeoContent\Model\Config\Source\OpenAiModel</source_model>
+                    <depends>
+                        <field id="llm_provider">openai</field>
+                    </depends>
+                </field>
+
+                <field id="anthropic_api_key" translate="label comment" type="obscure" sortOrder="40"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Anthropic API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Get a key at https://console.anthropic.com/</comment>
+                    <depends>
+                        <field id="llm_provider">anthropic</field>
+                    </depends>
+                </field>
+                <field id="anthropic_model" translate="label comment" type="select" sortOrder="41"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Claude Model</label>
+                    <source_model>AI\SeoContent\Model\Config\Source\AnthropicModel</source_model>
+                    <depends>
+                        <field id="llm_provider">anthropic</field>
+                    </depends>
+                </field>
+
+                <field id="temperature" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Temperature</label>
+                    <validate>validate-number</validate>
+                    <comment>0.0 = deterministic, 1.0 = creative. Recommended: 0.4</comment>
+                </field>
+            </group>
+
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Cron Generation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When enabled, cron enqueues or processes SEO jobs nightly.</comment>
+                </field>
+                <field id="use_message_queue" translate="label comment" type="select" sortOrder="35"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use Message Queue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Recommended for 10k+ SKUs. Cron enqueues jobs; consumer processes them.</comment>
+                </field>
+                <field id="queue_connection" translate="label comment" type="select" sortOrder="36"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Queue Connection</label>
+                    <source_model>AI\SeoContent\Model\Config\Source\QueueConnection</source_model>
+                    <comment>Database for dev/small stores. RabbitMQ (AMQP) for Adobe Commerce production.</comment>
+                    <depends>
+                        <field id="use_message_queue">1</field>
+                    </depends>
+                </field>
+                <field id="enqueue_batch_size" translate="label comment" type="text" sortOrder="38"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enqueue Batch Size</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Products enqueued per cron run per store (queue mode). Default: 500.</comment>
+                    <depends>
+                        <field id="use_message_queue">1</field>
+                    </depends>
+                </field>
+                <field id="batch_size" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sync Batch Size</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Products processed per run when queue is disabled or using --sync.</comment>
+                </field>
+                <field id="only_empty_meta" translate="label comment" type="select" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Only Empty Meta Description</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Skip products that already have a meta description.</comment>
+                </field>
+                <field id="generate_meta_keyword" translate="label comment" type="select" sortOrder="55"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Generate Meta Keywords</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Also generate comma-separated meta_keyword values.</comment>
+                </field>
+                <field id="generate_short_description" translate="label comment" type="select" sortOrder="56"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Generate Short Description</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Also generate catalog short_description text.</comment>
+                </field>
+                <field id="only_empty_short_description" translate="label comment" type="select" sortOrder="57"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Only Empty Short Description</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Skip short_description generation when already populated.</comment>
+                    <depends>
+                        <field id="generate_short_description">1</field>
+                    </depends>
+                </field>
+                <field id="dry_run" translate="label comment" type="select" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dry Run</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Log generated content without saving to catalog.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
